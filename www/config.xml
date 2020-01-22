@@ -6,7 +6,7 @@
         id        = "com.vibotapp.joystick"
         version   = "1.0.0">
 
-    <name>ROS Joystick</name>
+    <name>Vibot Joystick</name>
     <description>Vibot Joystick is an Application for ROS.</description>
     <author href="https://github.com/georgealexakis" email="geosalexs@gmail.com">George Alexakis</author>
     <content src="index.html" />
