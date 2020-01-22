@@ -140,7 +140,7 @@ function connect(robotURL, fpvValue) {
     // Subscribe to /rgb/image_raw/compressed to receive compressed images
     imageSubscriber = new ROSLIB.Topic({
         ros: ROS,
-        name: '/camera/rgb/image_raw/compressed',
+        name: '/camera/image_raw/compressed',
         messageType: 'sensor_msgs/CompressedImage'
     });
     // Receive base64 messages and add data:image/jpeg;base64, to show data

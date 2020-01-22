@@ -1,7 +1,7 @@
 {
-  "name": "ros-joystick-hybrid",
+  "name": "vibot-joystick",
   "version": "4.0.0",
-  "description": "ROS Joystick Hybrid is an Application for ROS.",
+  "description": "Vibot Joystick Hybrid is an Application for ROS.",
   "main": "index.js",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.12.0",
