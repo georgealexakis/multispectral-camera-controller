@@ -15,6 +15,7 @@ var imageSubscriber; // Subscribes and receives stream of images
 var batterySubscriber; // Receives battery kobuki base status
 var diagnosticsSubscriber; // Receives diagnostics messages and status from robot
 var commandSubscriber; // Receives visp auto tracker detected QR code tag (live reader)
+var imageTopic; // FPV topic
 init();
 // Initialize settings
 function init() {
@@ -28,6 +29,7 @@ function setSettings() {
     var robotURL = 'ws://' + document.getElementById('robotIP').value + ':9090';
     maxLinear = document.getElementById('maxLinearSpeed').value;
     maxAngular = document.getElementById('maxAngularSpeed').value;
+    imageTopic = document.getElementById('imageTopic').value;
     var fpvValue = document.getElementById('fpv').checked;
     $('#connectModal').modal('hide');
     connect(robotURL, fpvValue);
@@ -140,7 +142,7 @@ function connect(robotURL, fpvValue) {
     // Subscribe to /rgb/image_raw/compressed to receive compressed images
     imageSubscriber = new ROSLIB.Topic({
         ros: ROS,
-        name: '/camera/image_raw/compressed',
+        name: imageTopic,
         messageType: 'sensor_msgs/CompressedImage'
     });
     // Receive base64 messages and add data:image/jpeg;base64, to show data
