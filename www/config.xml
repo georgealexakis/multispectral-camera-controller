@@ -4,12 +4,13 @@
 <widget xmlns     = "http://www.w3.org/ns/widgets"
         xmlns:gap = "http://phonegap.com/ns/1.0"
         id        = "com.vibotapp.joystick"
-        version   = "1.0.0">
+        version   = "1.0.1">
 
     <name>Vibot Joystick</name>
-    <description>Vibot Joystick is an Application for ROS.</description>
+    <description>Vibot Joystick is an Application for ROS that uses multispectral cameras.</description>
     <author href="https://github.com/georgealexakis" email="geosalexs@gmail.com">George Alexakis</author>
     <content src="index.html" />
+    <content src="original.html" />
 	
     <plugin name="cordova-plugin-battery-status"      source="npm" spec="~1.2.4" />
     <plugin name="cordova-plugin-camera"              source="npm" spec="~2.4.1" />

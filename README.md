@@ -1,4 +1,4 @@
 # Vibot Joystick
 
-Experimental application for multispectral cameras and Turtlebot 2.
+Experimental application for multispectral cameras and ROS.
  
