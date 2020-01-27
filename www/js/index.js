@@ -53,7 +53,7 @@ function setSettingsOriginal() {
     var robotURL = 'ws://' + document.getElementById('inputIP').value + ':9090';
     exposure = document.getElementById('inputExposure').value;
     frameRate = document.getElementById('inputFrameRate').value;
-    originalImage = document.getElementById('originalImage').value;
+    originalImage = document.getElementById('originalImageTopic').value;
     var fpvValue = document.getElementById('fpv').checked;
     $('#connectModal').modal('hide');
     connectOriginal(robotURL, fpvValue);
