@@ -19,25 +19,30 @@
     <div class="container">
       <div class="row">
         <div class="col text-center">
-          <a href="original.html"><i id="signal" class="fas fa-ban"></i></a>
+          <a href="original.html"><i id="signal" class="fas fa-camera"></i></a>
         </div>
         <div class="col text-center">
           <p>
-            <i id="battery" class="fas fa-ban"></i>
+            Network: <small id="network"></small>
           </p>
         </div>
         <div class="col text-center">
           <p>
-            <small id="status"></small>
+            IP: <small id="IP"></small>
           </p>
         </div>
         <div class="col text-center">
           <p>
-            <i id="signal" class="fas fa-ban"></i>
+            Exposure: <small id="exposure"></small>
           </p>
         </div>
         <div class="col text-center">
-          <button onclick="reconnect()"><i class="fas fa-refresh"></i></button>
+          <p>
+            Frame Rate: <small id="frameRate"></small>
+          </p>
+        </div>
+        <div class="col text-center">
+          <button type="button" class="btn btn-link" onclick="reconnect()"><i class="fas fa-redo-alt"></i></button>
         </div>
       </div>
       <div class="row">
@@ -97,16 +102,16 @@
         <div class="modal-body">
           <form>
             <div class="form-group">
-              <label for="robotIP" class="col-form-label">Robot IP:</label>
-              <input type="text" class="form-control" id="robotIP" value="192.168.0.10">
+              <label for="inputIP" class="col-form-label">Robot IP:</label>
+              <input type="text" class="form-control" id="inputIP" value="192.168.0.10">
             </div>
             <div class="form-group">
-              <label for="exposure" class="col-form-label">Exposure:</label>
-              <input type="number" class="form-control" id="exposure" value="1">
+              <label for="inputExposure" class="col-form-label">Exposure:</label>
+              <input type="number" class="form-control" id="inputExposure" value="1">
             </div>
             <div class="form-group">
-              <label for="frameRate" class="col-form-label">Frame Rate:</label>
-              <input type="number" class="form-control" id="frameRate" value="2">
+              <label for="inputFrameRate" class="col-form-label">Frame Rate:</label>
+              <input type="number" class="form-control" id="inputFrameRate" value="2">
             </div>
             <div class="form-group">
               <label for="b1Topic" class="col-form-label">Band 1 Topic:</label>

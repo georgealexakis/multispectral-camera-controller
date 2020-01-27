@@ -1,5 +1,3 @@
-var status = "";
-var connectStatus = false;
 var diagnosticsSubscriber;
 var exposure;
 var frameRate;
@@ -33,9 +31,9 @@ function init() {
 }
 // Modify settings
 function setSettings() {
-    var robotURL = 'ws://' + document.getElementById('robotIP').value + ':9090';
-    exposure = document.getElementById('exposure').value;
-    frameRate = document.getElementById('frameRate').value;
+    var robotURL = 'ws://' + document.getElementById('inputIP').value + ':9090';
+    exposure = document.getElementById('inputExposure').value;
+    frameRate = document.getElementById('inputFrameRate').value;
     image1 = document.getElementById('b1Topic').value;
     image2 = document.getElementById('b2Topic').value;
     image3 = document.getElementById('b3Topic').value;
@@ -48,16 +46,23 @@ function setSettings() {
     var fpvValue = document.getElementById('fpv').checked;
     $('#connectModal').modal('hide');
     connect(robotURL, fpvValue);
+    updateStatus();
 }
 // Modify settings
 function setSettingsOriginal() {
-    var robotURL = 'ws://' + document.getElementById('robotIP').value + ':9090';
-    exposure = document.getElementById('exposure').value;
-    frameRate = document.getElementById('frameRate').value;
+    var robotURL = 'ws://' + document.getElementById('inputIP').value + ':9090';
+    exposure = document.getElementById('inputExposure').value;
+    frameRate = document.getElementById('inputFrameRate').value;
     originalImage = document.getElementById('originalImage').value;
     var fpvValue = document.getElementById('fpv').checked;
     $('#connectModal').modal('hide');
     connectOriginal(robotURL, fpvValue);
+    updateStatus();
+}
+function updateStatus() {
+    document.getElementById("IP").innerHTML = document.getElementById('inputIP').value;
+    document.getElementById("exposure").innerHTML = exposure;
+    document.getElementById("frameRate").innerHTML = frameRate;
 }
 // Connect to robot
 function connect(robotURL, fpvValue) {
@@ -67,19 +72,13 @@ function connect(robotURL, fpvValue) {
         url: robotURL
     });
     ROS.on('connection', function () {
-        document.getElementById("status").innerHTML = "Network: connected";
-        document.getElementById("signal").className = "fas fa-signal";
-        connectStatus = true;
+        document.getElementById("network").innerHTML = "connected";
     });
     ROS.on('error', function (error) {
-        document.getElementById("status").innerHTML = "Network: error";
-        document.getElementById("signal").className = "fas fa-exclamation-circle";
-        connectStatus = false;
+        document.getElementById("network").innerHTML = "error";
     });
     ROS.on('close', function () {
-        document.getElementById("status").innerHTML = "Network: closed";
-        document.getElementById("signal").className = "fas fa-ban";
-        connectStatus = false;
+        document.getElementById("network").innerHTML = "closed";
     });
     // Subscribe to /band1/compressed to receive compressed images
     band1Subscriber = new ROSLIB.Topic({
@@ -188,7 +187,7 @@ function connect(robotURL, fpvValue) {
     });
     // Receive command
     diagnosticsSubscriber.subscribe(function (msg) {
-        document.getElementById("status").innerHTML = msg.data;
+        document.getElementById("network").innerHTML = msg.data;
     });
 }
 // Connect to robot
@@ -199,19 +198,13 @@ function connectOriginal(robotURL, fpvValue) {
         url: robotURL
     });
     ROS.on('connection', function () {
-        document.getElementById("status").innerHTML = "Network: connected";
-        document.getElementById("signal").className = "fas fa-signal";
-        connectStatus = true;
+        document.getElementById("network").innerHTML = "connected";
     });
     ROS.on('error', function (error) {
-        document.getElementById("status").innerHTML = "Network: error";
-        document.getElementById("signal").className = "fas fa-exclamation-circle";
-        connectStatus = false;
+        document.getElementById("network").innerHTML = "error";
     });
     ROS.on('close', function () {
-        document.getElementById("status").innerHTML = "Network: closed";
-        document.getElementById("signal").className = "fas fa-ban";
-        connectStatus = false;
+        document.getElementById("network").innerHTML = "closed";
     });
     // Subscribe to /camera/image_raw to receive compressed images
     originalImageSubscriber = new ROSLIB.Topic({
@@ -222,7 +215,7 @@ function connectOriginal(robotURL, fpvValue) {
     // Receive base64 messages and add data:image/jpeg;base64, to show data
     originalImageSubscriber.subscribe(function (msg) {
         if (fpvValue)
-            document.getElementById("b1").src = "data:image/jpeg;base64," + msg.data;
+            document.getElementById("originalImage").src = "data:image/jpeg;base64," + msg.data;
     });
     // Subscribe to /joystick/diagnostics to receive diagnostics
     diagnosticsSubscriber = new ROSLIB.Topic({
@@ -232,7 +225,7 @@ function connectOriginal(robotURL, fpvValue) {
     });
     // Receive command
     diagnosticsSubscriber.subscribe(function (msg) {
-        document.getElementById("status").innerHTML = msg.data;
+        document.getElementById("network").innerHTML = msg.data;
     });
 }
 // Reconnect
