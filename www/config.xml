@@ -10,7 +10,7 @@
     <description>Vibot Joystick is an Application for ROS that uses multispectral cameras.</description>
     <author href="https://github.com/georgealexakis" email="geosalexs@gmail.com">George Alexakis</author>
     <content src="index.html" />
-    <content src="original.html" />
+    <content src="multi.html" />
 	
     <plugin name="cordova-plugin-battery-status"      source="npm" spec="~1.2.4" />
     <plugin name="cordova-plugin-camera"              source="npm" spec="~2.4.1" />

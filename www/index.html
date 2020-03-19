@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <meta name="description" content="Vibot Joystick">
+  <meta name="description" content="Multispectral Camera Tool">
   <meta name="author" content="George Alexakis">
   <title>Vibot Joystick - Multispectral Camera Tool</title>
   <link rel="icon" type="image/png" href="res/icon/android/drawable-xxxhdpi-icon.png">
@@ -18,83 +18,63 @@
   <main role="main" class="flex-shrink-0">
     <div class="container">
       <div class="row">
-        <div class="col text-center">
-          <a href="original.html"><i id="signal" class="fas fa-camera"></i></a>
+        <div class="col-1 text-center">
+          <a class="btn btn-link" href="multi.html"><i id="signal" class="fas fa-th"></i></a>
         </div>
-        <div class="col text-center">
+        <div class="col-1 text-center">
+          <button type="button" class="btn btn-link" onclick="displayInfo()"><i class="fas fa-info"></i></button>
+        </div>
+        <div class="col-4 text-center">
           <p>
             Network: <small id="network"></small>
           </p>
         </div>
-        <div class="col text-center">
+        <div class="col-4 text-center">
           <p>
             IP: <small id="IP"></small>
           </p>
         </div>
-        <div class="col text-center">
-          <p>
-            Exposure: <small id="exposure"></small>
-          </p>
+        <div class="col-1 text-center">
+          <button type="button" class="btn btn-link" onclick="changeParameters()"><i class="fas fa-cog"></i></button>
         </div>
-        <div class="col text-center">
-          <p>
-            Frame Rate: <small id="frameRate"></small>
-          </p>
-        </div>
-        <div class="col text-center">
+        <div class="col-1 text-center">
           <button type="button" class="btn btn-link" onclick="reconnect()"><i class="fas fa-redo-alt"></i></button>
         </div>
       </div>
       <div class="row">
         <div class="col text-center">
-          <img src="res/multibands.bmp" alt="Band 8" class="bands" id="b8">
-          <p>Band 8</p>
-        </div>
-        <div class="col text-center">
-          <img src="res/multibands.bmp" alt="Band 7" class="bands" id="b7">
-          <p>Band 7</p>
-        </div>
-        <div class="col text-center">
-          <img src="res/multibands.bmp" alt="Band 6" class="bands" id="b6">
-          <p>Band 6</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col text-center">
-          <img src="res/multibands.bmp" alt="Band 1" class="bands" id="b1">
-          <p>Band 1</p>
-        </div>
-        <div class="col text-center">
-          <img src="res/multibands.bmp" alt="Band 9" class="bands" id="b9">
-          <p>Band 9</p>
-        </div>
-        <div class="col text-center">
-          <img src="res/multibands.bmp" alt="Band 5" class="bands" id="b5">
-          <p>Band 5</p>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col text-center">
-          <img src="res/multibands.bmp" alt="Band 2" class="bands" id="b2">
-          <p>Band 2</p>
-        </div>
-        <div class="col text-center">
-          <img src="res/multibands.bmp" alt="Band 3" class="bands" id="b3">
-          <p>Band 3</p>
-        </div>
-        <div class="col text-center">
-          <img src="res/multibands.bmp" alt="Band 4" class="bands" id="b4">
-          <p>Band 4</p>
+          <img src="res/no-image.png" alt="Original Image" style="width: 60%" id="originalImage">
         </div>
       </div>
     </div>
   </main>
+
+  <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="robotInformationLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="robotInformationLabel">Information</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Some Information</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="modal fade" id="connectModal" tabindex="-1" role="dialog" aria-labelledby="robotInformationLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="robotInformationLabel">ROS Settings</h5>
+          <h5 class="modal-title" id="robotInformationLabel">ROS Connection Settings</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -102,70 +82,90 @@
         <div class="modal-body">
           <form>
             <div class="form-group">
-              <label for="inputIP" class="col-form-label">Robot IP:</label>
+              <label for="inputIP" class="col-form-label">ROS IP:</label>
               <input type="text" class="form-control" id="inputIP" value="192.168.101.44">
             </div>
             <div class="form-group">
-              <label for="inputExposure" class="col-form-label">Exposure:</label>
-              <input type="number" class="form-control" id="inputExposure" value="1">
-            </div>
-            <div class="form-group">
-              <label for="inputFrameRate" class="col-form-label">Frame Rate:</label>
-              <input type="number" class="form-control" id="inputFrameRate" value="2">
-            </div>
-            <div class="form-group">
-              <label for="b1Topic" class="col-form-label">Band 1 Topic:</label>
-              <input type="text" class="form-control" id="b1Topic" value="/camera/image_raw/compressed">
-            </div>
-            <div class="form-group">
-              <label for="b2Topic" class="col-form-label">Band 2 Topic:</label>
-              <input type="text" class="form-control" id="b2Topic" value="/band2/compressed">
-            </div>
-            <div class="form-group">
-              <label for="b3Topic" class="col-form-label">Band 3 Topic:</label>
-              <input type="text" class="form-control" id="b3Topic" value="/band3/compressed">
-            </div>
-            <div class="form-group">
-              <label for="b4Topic" class="col-form-label">Band 4 Topic:</label>
-              <input type="text" class="form-control" id="b4Topic" value="/band4/compressed">
-            </div>
-            <div class="form-group">
-              <label for="b5Topic" class="col-form-label">Band 5 Topic:</label>
-              <input type="text" class="form-control" id="b5Topic" value="/band5/compressed">
-            </div>
-            <div class="form-group">
-              <label for="b6Topic" class="col-form-label">Band 6 Topic:</label>
-              <input type="text" class="form-control" id="b6Topic" value="/band6/compressed">
-            </div>
-            <div class="form-group">
-              <label for="b7Topic" class="col-form-label">Band 7 Topic:</label>
-              <input type="text" class="form-control" id="b7Topic" value="/band7/compressed">
-            </div>
-            <div class="form-group">
-              <label for="b8Topic" class="col-form-label">Band 8 Topic:</label>
-              <input type="text" class="form-control" id="b8Topic" value="/band8/compressed">
-            </div>
-            <div class="form-group">
-              <label for="b9Topic" class="col-form-label">Band 9 Topic:</label>
-              <input type="text" class="form-control" id="b9Topic" value="/band9/compressed">
-            </div>
-            <div class="form-group">
-              <label for="fpv" class="col-form-label">FPV:</label>
-              <br>
-              <label class="switch">
-                <input type="checkbox" id="fpv" checked>
-                <span class="slider"></span>
-              </label>
+              <label for="originalImageTopic" class="col-form-label">Original Image Topic (Only compressed):</label>
+              <input type="text" class="form-control" id="originalImageTopic" value="/camera/image_raw/compressed">
             </div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="setSettings()">Connect</button>
+          <button type="button" class="btn btn-primary" onclick="setSingleSettings()">Connect</button>
         </div>
       </div>
     </div>
   </div>
+
+  <div class="modal fade" id="parametersModal" tabindex="-1" role="dialog" aria-labelledby="robotInformationLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="robotInformationLabel">ROS Parameter Settings</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="inputExposure" class="col-form-label">Exposure:</label>
+              <input type="number" class="form-control" id="inputExposure" value="1">
+            </div>
+            <div class="form-group">
+              <label for="inputPixelClock" class="col-form-label">Pixel Clock:</label>
+              <input type="number" class="form-control" id="inputPixelClock" value="1">
+            </div>
+            <div class="form-group">
+              <label for="inputFrameRate" class="col-form-label">Frame Rate:</label>
+              <input type="number" class="form-control" id="inputFrameRate" value="1">
+            </div>
+            <div class="form-group">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active">
+                  <input type="radio" name="options1" id="onAutoWhiteBalance" autocomplete="off" checked> ON
+                </label>
+                <label class="btn btn-secondary">
+                  <input type="radio" name="options1" id="offAutoWhiteBalance" autocomplete="off"> OFF
+                </label>
+              </div>
+              <label for="auto-white-balance" class="col-form-label">Auto White Balance</label>
+            </div>
+            <div class="form-group">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active">
+                  <input type="radio" name="options2" id="onAutoFrameRate" autocomplete="off" checked> ON
+                </label>
+                <label class="btn btn-secondary">
+                  <input type="radio" name="options2" id="offAutoFrameRate" autocomplete="off"> OFF
+                </label>
+              </div>
+              <label for="auto-frame-rate" class="col-form-label">Auto Frame Rate</label>
+            </div>
+            <div class="form-group">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active">
+                  <input type="radio" name="options3" id="onAutoExposure" autocomplete="off" checked> ON
+                </label>
+                <label class="btn btn-secondary">
+                  <input type="radio" name="options3" id="offAutoExposure" autocomplete="off"> OFF
+                </label>
+              </div>
+              <label for="auto-exposure" class="col-form-label">Auto Exposure</label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="setParameters()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script src="node_modules/roslib/build/roslib.min.js"></script>
   <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
   <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
