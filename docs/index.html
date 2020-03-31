@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en" class="h-100">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Multispectral Camera Tool">
+  <meta name="author" content="George Alexakis">
+  <title>Vibot Joystick - Multispectral Camera Tool</title>
+  <link rel="icon" type="image/png" href="res/icon/android/drawable-xxxhdpi-icon.png">
+  <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
+  <link rel="stylesheet" href="css/index.css">
+</head>
+
+<body class="d-flex flex-column h-100">
+  <header></header>
+  <main role="main" class="flex-shrink-0">
+    <div class="container">
+      <div class="row">
+        <div class="col-1 text-center">
+          <a class="btn btn-link" href="multi.html"><i id="signal" class="fas fa-th"></i></a>
+        </div>
+        <div class="col-1 text-center">
+          <button type="button" class="btn btn-link" onclick="displayInfo()"><i class="fas fa-info"></i></button>
+        </div>
+        <div class="col-4 text-center">
+          <p>
+            Network: <small id="network"></small>
+          </p>
+        </div>
+        <div class="col-4 text-center">
+          <p>
+            IP: <small id="IP"></small>
+          </p>
+        </div>
+        <div class="col-1 text-center">
+          <button type="button" class="btn btn-link" onclick="changeParameters()"><i class="fas fa-cog"></i></button>
+        </div>
+        <div class="col-1 text-center">
+          <button type="button" class="btn btn-link" onclick="reconnect()"><i class="fas fa-redo-alt"></i></button>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col text-center">
+          <img src="res/no-image.png" alt="Original Image" style="width: 60%" id="originalImage">
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="robotInformationLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="robotInformationLabel">Information</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Some Information</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="connectModal" tabindex="-1" role="dialog" aria-labelledby="robotInformationLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="robotInformationLabel">ROS Connection Settings</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="inputIP" class="col-form-label">ROS IP:</label>
+              <input type="text" class="form-control" id="inputIP" value="192.168.101.44">
+            </div>
+            <div class="form-group">
+              <label for="originalImageTopic" class="col-form-label">Original Image Topic (Only compressed):</label>
+              <input type="text" class="form-control" id="originalImageTopic" value="/camera/image_raw/compressed">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="setSingleSettings()">Connect</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="parametersModal" tabindex="-1" role="dialog" aria-labelledby="robotInformationLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="robotInformationLabel">ROS Parameter Settings</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="inputExposure" class="col-form-label">Exposure:</label>
+              <input type="number" class="form-control" id="inputExposure" value="1">
+            </div>
+            <div class="form-group">
+              <label for="inputPixelClock" class="col-form-label">Pixel Clock:</label>
+              <input type="number" class="form-control" id="inputPixelClock" value="1">
+            </div>
+            <div class="form-group">
+              <label for="inputFrameRate" class="col-form-label">Frame Rate:</label>
+              <input type="number" class="form-control" id="inputFrameRate" value="1">
+            </div>
+            <div class="form-group">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active">
+                  <input type="radio" name="options1" id="onAutoWhiteBalance" autocomplete="off" checked> ON
+                </label>
+                <label class="btn btn-secondary">
+                  <input type="radio" name="options1" id="offAutoWhiteBalance" autocomplete="off"> OFF
+                </label>
+              </div>
+              <label for="auto-white-balance" class="col-form-label">Auto White Balance</label>
+            </div>
+            <div class="form-group">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active">
+                  <input type="radio" name="options2" id="onAutoFrameRate" autocomplete="off" checked> ON
+                </label>
+                <label class="btn btn-secondary">
+                  <input type="radio" name="options2" id="offAutoFrameRate" autocomplete="off"> OFF
+                </label>
+              </div>
+              <label for="auto-frame-rate" class="col-form-label">Auto Frame Rate</label>
+            </div>
+            <div class="form-group">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active">
+                  <input type="radio" name="options3" id="onAutoExposure" autocomplete="off" checked> ON
+                </label>
+                <label class="btn btn-secondary">
+                  <input type="radio" name="options3" id="offAutoExposure" autocomplete="off"> OFF
+                </label>
+              </div>
+              <label for="auto-exposure" class="col-form-label">Auto Exposure</label>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" onclick="setParameters()">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="node_modules/roslib/build/roslib.min.js"></script>
+  <script src="node_modules/jquery/dist/jquery.slim.min.js"></script>
+  <script src="node_modules/popper.js/dist/umd/popper.min.js"></script>
+  <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="js/index.js"></script>
+</body>
+
+</html>
