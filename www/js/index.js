@@ -63,6 +63,7 @@ function connectSingle(robotURL) {
     ROS.on('connection', function () {
         document.getElementById("network").innerHTML = "connected";
         connectStatus = true;
+        parametersPublisher.publish("sync");
     });
     ROS.on('error', function (error) {
         document.getElementById("network").innerHTML = "error";
@@ -179,6 +180,11 @@ function displayInfo() {
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
+}
+
+// Camera parameters synchronization
+function synchronization() {
+    parametersPublisher.publish("sync");
 }
 
 // Modify settings

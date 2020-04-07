@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <meta name="description" content="Multispectral Camera Tool">
   <meta name="author" content="George Alexakis">
-  <title>Vibot Joystick - Multispectral Camera Tool</title>
+  <title>Multispectral Camera Tool</title>
   <link rel="icon" type="image/png" href="res/icon/android/drawable-xxxhdpi-icon.png">
   <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="node_modules/@fortawesome/fontawesome-free/css/all.min.css">
@@ -43,7 +43,7 @@
       </div>
       <div class="row">
         <div class="col text-center">
-          <img src="res/no-image.png" alt="Original Image" style="width: 60%" id="originalImage">
+          <img src="res/no-image.png" alt="Original Image" class="raw-image rounded" id="originalImage">
         </div>
       </div>
     </div>
@@ -60,7 +60,20 @@
           </button>
         </div>
         <div class="modal-body">
-          <p>Some Information</p>
+          <h3>Multispectral camera controller</h3>
+          <p>Project github page: <a
+              href="https://github.com/georgealexakis/multispectral-camera-controller">github.com/georgealexakis/multispectral-camera-controller</a>
+          </p>
+          <p>Experimental application for multispectral cameras and ROS. It connects with ROS client API for camera
+            reconfiguration. You need to install rosbridge suite to enable the connection between ROS and the
+            controller. This controller only has been tested with ROS melodic.</p>
+          <p>The project structure is good for using this with Apache cordova and build a hybrid application. This
+            project enables the reconfiguration of camera parameters such as exposure, frame rate etc. Especially this
+            project is used for multispectral camera with 9 bands.</p>
+          <p>This is the command to install rosbridge_suite:<br>sudo apt-get install
+            ros-<b>rosdistro</b>-rosbridge-server</p>
+          <p>This is the github page of rosbridge: <a
+              href="https://github.com/RobotWebTools/rosbridge_suite">github.com/RobotWebTools/rosbridge_suite</a></p>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -155,6 +168,10 @@
                 </label>
               </div>
               <label for="auto-exposure" class="col-form-label">Auto Exposure</label>
+            </div>
+            <div class="form-group">
+              <button type="button" class="btn btn-primary btn-lg btn-block" onclick="synchronization()">Synchronize
+                Camera Parameters</button>
             </div>
           </form>
         </div>

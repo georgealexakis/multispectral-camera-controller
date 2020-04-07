@@ -1,11 +1,21 @@
 body {
-    background-color: black;
-  }
+  background-color: black;
+}
 
-  p {
-    color: #6c757d;
-  }
+p {
+  color: #6c757d;
+}
 
-  .bands{
-    width: 100%;
+.bands {
+  width: 100%;
+}
+
+.raw-image {
+  width: 100% 
+}
+
+@media only screen and (max-width: 1500px) {
+  .raw-image {
+    width: 60% 
   }
+}
