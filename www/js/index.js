@@ -46,7 +46,7 @@ function init() {
 
 // Modify single image settings
 function setSingleSettings() {
-    var robotURL = 'wss://' + document.getElementById('inputIP').value + ':9090';
+    var robotURL = 'ws://' + document.getElementById('inputIP').value + ':9090';
     originalImage = document.getElementById('originalImageTopic').value;
     document.getElementById("IP").innerHTML = robotURL;
     $('#connectModal').modal('hide');
@@ -183,7 +183,7 @@ function displayInfo() {
 
 // Modify settings
 function setMultipleSettings() {
-    var robotURL = 'wss://' + document.getElementById('inputIP').value + ':9090';
+    var robotURL = 'ws://' + document.getElementById('inputIP').value + ':9090';
     document.getElementById("IP").innerHTML = robotURL;
     image1 = document.getElementById('b1Topic').value;
     image2 = document.getElementById('b2Topic').value;
