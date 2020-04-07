@@ -63,7 +63,6 @@ function connectSingle(robotURL) {
     ROS.on('connection', function () {
         document.getElementById("network").innerHTML = "connected";
         connectStatus = true;
-        parametersPublisher.publish("sync");
     });
     ROS.on('error', function (error) {
         document.getElementById("network").innerHTML = "error";
@@ -99,27 +98,32 @@ function connectSingle(robotURL) {
         document.getElementById("inputPixelClock").value = parseInt(inputParameters[1]);
         document.getElementById("inputFrameRate").value = parseInt(inputParameters[2]);
         if (inputParameters[3] == "True") {
+            $(".bg11").button("toggle");
             document.getElementById('onAutoWhiteBalance').checked = true;
             document.getElementById('offAutoWhiteBalance').checked = false;
         } else {
+            $(".bg12").button("toggle");
             document.getElementById('onAutoWhiteBalance').checked = false;
             document.getElementById('offAutoWhiteBalance').checked = true;
         }
         if (inputParameters[4] == "True") {
+            $(".bg21").button("toggle");
             document.getElementById('onAutoFrameRate').checked = true;
             document.getElementById('offAutoFrameRate').checked = false;
         } else {
+            $(".bg22").button("toggle");
             document.getElementById('onAutoFrameRate').checked = false;
             document.getElementById('offAutoFrameRate').checked = true;
         }
         if (inputParameters[5] == "True") {
+            $(".bg31").button("toggle");
             document.getElementById('onAutoExposure').checked = true;
             document.getElementById('offAutoExposure').checked = false;
         } else {
+            $(".bg32").button("toggle");
             document.getElementById('onAutoExposure').checked = false;
             document.getElementById('offAutoExposure').checked = true;
         }
-
     });
     // Publish to /camera_controller the camera parameters
     parametersPublisher = new ROSLIB.Topic({
@@ -127,6 +131,7 @@ function connectSingle(robotURL) {
         name: "/camera_controller",
         messageType: 'std_msgs/String'
     });
+    setTimeout(function () { synchronization(); }, 2000);
 }
 
 // Set camera parameters
@@ -184,7 +189,10 @@ function displayInfo() {
 
 // Camera parameters synchronization
 function synchronization() {
-    parametersPublisher.publish("sync");
+    var parameters = new ROSLIB.Message({
+        data: "sync"
+    });
+    parametersPublisher.publish(parameters);
 }
 
 // Modify settings
