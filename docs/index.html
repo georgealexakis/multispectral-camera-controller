@@ -17,7 +17,7 @@
   <header></header>
   <main role="main" class="flex-shrink-0">
     <div class="container">
-      <div class="row">
+      <div class="row status-bar">
         <div class="col-1 text-center">
           <a class="btn btn-link" href="multi.html"><i id="signal" class="fas fa-th"></i></a>
         </div>
@@ -60,20 +60,39 @@
           </button>
         </div>
         <div class="modal-body">
-          <h3>Multispectral camera controller</h3>
+          <h5>Multispectral camera controller</h5>
           <p>Project github page: <a
               href="https://github.com/georgealexakis/multispectral-camera-controller">github.com/georgealexakis/multispectral-camera-controller</a>
           </p>
+          <hr>
+          <h5>Description</h5>
           <p>Experimental application for multispectral cameras and ROS. It connects with ROS client API for camera
             reconfiguration. You need to install rosbridge suite to enable the connection between ROS and the
             controller. This controller only has been tested with ROS melodic.</p>
-          <p>The project structure is good for using this with Apache cordova and build a hybrid application. This
+          <p>The project structure is made for using it with Apache cordova and build a hybrid application. This
             project enables the reconfiguration of camera parameters such as exposure, frame rate etc. Especially this
             project is used for multispectral camera with 9 bands.</p>
-          <p>This is the command to install rosbridge_suite:<br>sudo apt-get install
-            ros-<b>rosdistro</b>-rosbridge-server</p>
-          <p>This is the github page of rosbridge: <a
-              href="https://github.com/RobotWebTools/rosbridge_suite">github.com/RobotWebTools/rosbridge_suite</a></p>
+          <p>Camera parameters can be change with this application such as frame rate, exposure, etc. It converts
+            parameter list into string and send it to the node and waits the same structure as feedback. Transmitted
+            string example:
+            "10-55-30-False-True-True". It supports the
+            display of multiple images.</p>
+          <hr>
+          <h5>Setup</h5>
+          <ol class="list-group">
+            <li class="list-group-item">
+              <p>Install rosbridge_suite:<br>sudo apt-get install
+                $ ros-<b>rosdistro</b>-rosbridge-server</p>
+              <p>This is the github page of rosbridge: <a
+                  href="https://github.com/RobotWebTools/rosbridge_suite">website</a></p>
+            </li>
+            <li class="list-group-item">
+              <p>Use Python dynamic_reconfigure client API.</p>
+              <p>This is the page of Python dynamic_reconfigure client API: <a
+                  href="https://docs.ros.org/api/dynamic_reconfigure/html/dynamic_reconfigure.client.Client-class.html">website</a>
+              </p>
+            </li>
+          </ol>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

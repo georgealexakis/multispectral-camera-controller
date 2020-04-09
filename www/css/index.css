@@ -6,6 +6,10 @@ p {
   color: #6c757d;
 }
 
+.status-bar i{
+  color: green;
+}
+
 .bands {
   width: 100%;
 }
