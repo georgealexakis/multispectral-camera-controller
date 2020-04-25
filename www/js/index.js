@@ -1,7 +1,7 @@
-// Initial connect variable
+// Initialize connection variable
 var connectStatus = false;
 
-// Camera variables for parameters
+// Variables for camera parameters
 var cameraFeedbackSubscriber;
 var exposure;
 var frameRate;
@@ -15,26 +15,6 @@ var autoExposure2;
 var originalImage;
 var originalImageSubscriber;
 
-// Mutiple images and subscribers
-var image1;
-var image2;
-var image3;
-var image4;
-var image5;
-var image6;
-var image7;
-var image8;
-var image9;
-var band1Subscriber;
-var band2Subscriber;
-var band3Subscriber;
-var band4Subscriber;
-var band5Subscriber;
-var band6Subscriber;
-var band7Subscriber;
-var band8Subscriber;
-var band9Subscriber;
-
 // Initialize settings
 init();
 function init() {
@@ -42,23 +22,30 @@ function init() {
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
+    // Set cross-talk and white refernece to off
+    $(".bg42").button("toggle");
+    document.getElementById('onCrossTalk').checked = false;
+    document.getElementById('offCrossTalk').checked = true;
+    $(".bg52").button("toggle");
+    document.getElementById('onWhiteReference').checked = false;
+    document.getElementById('offWhiteReference').checked = true;
 }
 
-// Modify single image settings
+// Modify settings
 function setSingleSettings() {
-    var robotURL = 'ws://' + document.getElementById('inputIP').value + ':9090';
+    var URL = 'ws://' + document.getElementById('inputIP').value + ':9090';
     originalImage = document.getElementById('originalImageTopic').value;
-    document.getElementById("IP").innerHTML = robotURL;
+    document.getElementById("IP").innerHTML = URL;
     $('#connectModal').modal('hide');
-    connectSingle(robotURL);
+    connectSingle(URL);
 }
 
 // Connect with ROS
-function connectSingle(robotURL) {
+function connectSingle(URL) {
     var ROS;
     // ROS connection states
     ROS = new ROSLIB.Ros({
-        url: robotURL
+        url: URL
     });
     ROS.on('connection', function () {
         document.getElementById("network").innerHTML = "connected";
@@ -125,6 +112,12 @@ function connectSingle(robotURL) {
             document.getElementById('offAutoExposure').checked = true;
         }
     });
+    // Publish to /camera_settings the camera parameters cross-talk and white reference
+    extraParametersPublisher = new ROSLIB.Topic({
+        ros: ROS,
+        name: "/camera_settings",
+        messageType: 'std_msgs/String'
+    });
     // Publish to /camera_controller the camera parameters
     parametersPublisher = new ROSLIB.Topic({
         ros: ROS,
@@ -166,6 +159,34 @@ function setParameters() {
     }
 }
 
+// Set cross-talk and white reference
+function setCTWRParameters(choice) {
+    if (connectStatus) {
+        var parameters = "00";
+        if (choice == 0) {
+            b1 = document.getElementById('onCrossTalk').checked;
+            b2 = document.getElementById('offCrossTalk').checked;
+            if (b1 && !b2) {
+                parameters = "00";
+            } else {
+                parameters = "01";
+            }
+        } else {
+            b3 = document.getElementById('onWhiteReference').checked;
+            b4 = document.getElementById('offWhiteReference').checked;
+            if (b3 && !b4) {
+                parameters = "10";
+            } else {
+                parameters = "11";
+            }
+        }
+        var parameters = new ROSLIB.Message({
+            data: parametersData
+        });
+        extraParametersPublisher.publish(parameters);
+    }
+}
+
 // Reconnect client
 function reconnect() {
     location.reload();
@@ -193,129 +214,4 @@ function synchronization() {
         data: "sync"
     });
     parametersPublisher.publish(parameters);
-}
-
-// Modify settings
-function setMultipleSettings() {
-    var robotURL = 'ws://' + document.getElementById('inputIP').value + ':9090';
-    document.getElementById("IP").innerHTML = robotURL;
-    image1 = document.getElementById('b1Topic').value;
-    image2 = document.getElementById('b2Topic').value;
-    image3 = document.getElementById('b3Topic').value;
-    image4 = document.getElementById('b4Topic').value;
-    image5 = document.getElementById('b5Topic').value;
-    image6 = document.getElementById('b6Topic').value;
-    image7 = document.getElementById('b7Topic').value;
-    image8 = document.getElementById('b8Topic').value;
-    image9 = document.getElementById('b9Topic').value;
-    $('#connectModal').modal('hide');
-    connectMultiple(robotURL);
-}
-
-// Connect multiple images
-function connectMultiple(robotURL) {
-    var ROS;
-    // ROS connection states
-    ROS = new ROSLIB.Ros({
-        url: robotURL
-    });
-    ROS.on('connection', function () {
-        document.getElementById("network").innerHTML = "connected";
-    });
-    ROS.on('error', function (error) {
-        document.getElementById("network").innerHTML = "error";
-    });
-    ROS.on('close', function () {
-        document.getElementById("network").innerHTML = "closed";
-    });
-    // Subscribe to /band1/compressed to receive compressed images
-    band1Subscriber = new ROSLIB.Topic({
-        ros: ROS,
-        name: image1,
-        messageType: 'sensor_msgs/CompressedImage'
-    });
-    // Receive base64 messages and add data:image/jpeg;base64, to show data
-    band1Subscriber.subscribe(function (msg) {
-        document.getElementById("b1").src = "data:image/jpeg;base64," + msg.data;
-    });
-    // Subscribe to /band2/compressed to receive compressed images
-    band2Subscriber = new ROSLIB.Topic({
-        ros: ROS,
-        name: image2,
-        messageType: 'sensor_msgs/CompressedImage'
-    });
-    // Receive base64 messages and add data:image/jpeg;base64, to show data
-    band2Subscriber.subscribe(function (msg) {
-        document.getElementById("b2").src = "data:image/jpeg;base64," + msg.data;
-    });
-    // Subscribe to /band3/compressed to receive compressed images
-    band3Subscriber = new ROSLIB.Topic({
-        ros: ROS,
-        name: image3,
-        messageType: 'sensor_msgs/CompressedImage'
-    });
-    // Receive base64 messages and add data:image/jpeg;base64, to show data
-    band3Subscriber.subscribe(function (msg) {
-        document.getElementById("b3").src = "data:image/jpeg;base64," + msg.data;
-    });
-    // Subscribe to /band4/compressed to receive compressed images
-    band4Subscriber = new ROSLIB.Topic({
-        ros: ROS,
-        name: image4,
-        messageType: 'sensor_msgs/CompressedImage'
-    });
-    // Receive base64 messages and add data:image/jpeg;base64, to show data
-    band4Subscriber.subscribe(function (msg) {
-        document.getElementById("b4").src = "data:image/jpeg;base64," + msg.data;
-    });
-    // Subscribe to /band3/compressed to receive compressed images
-    band5Subscriber = new ROSLIB.Topic({
-        ros: ROS,
-        name: image5,
-        messageType: 'sensor_msgs/CompressedImage'
-    });
-    // Receive base64 messages and add data:image/jpeg;base64, to show data
-    band5Subscriber.subscribe(function (msg) {
-        document.getElementById("b5").src = "data:image/jpeg;base64," + msg.data;
-    });
-    // Subscribe to /band4/compressed to receive compressed images
-    band6Subscriber = new ROSLIB.Topic({
-        ros: ROS,
-        name: image6,
-        messageType: 'sensor_msgs/CompressedImage'
-    });
-    // Receive base64 messages and add data:image/jpeg;base64, to show data
-    band6Subscriber.subscribe(function (msg) {
-        document.getElementById("b6").src = "data:image/jpeg;base64," + msg.data;
-    });
-    // Subscribe to /band7/compressed to receive compressed images
-    band7Subscriber = new ROSLIB.Topic({
-        ros: ROS,
-        name: image7,
-        messageType: 'sensor_msgs/CompressedImage'
-    });
-    // Receive base64 messages and add data:image/jpeg;base64, to show data
-    band7Subscriber.subscribe(function (msg) {
-        document.getElementById("b7").src = "data:image/jpeg;base64," + msg.data;
-    });
-    // Subscribe to /band8/compressed to receive compressed images
-    band8Subscriber = new ROSLIB.Topic({
-        ros: ROS,
-        name: image8,
-        messageType: 'sensor_msgs/CompressedImage'
-    });
-    // Receive base64 messages and add data:image/jpeg;base64, to show data
-    band8Subscriber.subscribe(function (msg) {
-        document.getElementById("b8").src = "data:image/jpeg;base64," + msg.data;
-    });
-    // Subscribe to /band9/compressed to receive compressed images
-    band9Subscriber = new ROSLIB.Topic({
-        ros: ROS,
-        name: image9,
-        messageType: 'sensor_msgs/CompressedImage'
-    });
-    // Receive base64 messages and add data:image/jpeg;base64, to show data
-    band9Subscriber.subscribe(function (msg) {
-        document.getElementById("b9").src = "data:image/jpeg;base64," + msg.data;
-    });
 }

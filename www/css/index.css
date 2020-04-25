@@ -1,19 +1,41 @@
+/* Global styles */
 body {
-  background-color: black;
+  background-color: #f1f1f1;
+  font-family: Arial;
 }
 
+/* Header styles */
 p {
-  color: #6c757d;
+  color: #666;
+}
+
+.status-bar p {
+  color: #666;
+  padding: 12px 16px;
+}
+
+.status-bar .btn {
+  border: none;
+  outline: none;
+  padding: 12px 16px;
+  background-color: #f1f1f1;
+  cursor: pointer;
+}
+
+.status-bar .btn:hover {
+  background-color: #ddd;
+}
+
+.status-bar .btn:active {
+  background-color: #6c757d;
+  color: white;
 }
 
 .status-bar i{
-  color: green;
+  color: #666;
 }
 
-.bands {
-  width: 100%;
-}
-
+/* Image styles */
 .raw-image {
   width: 100% 
 }
@@ -22,4 +44,12 @@ p {
   .raw-image {
     width: 60% 
   }
+}
+
+/* Modal styles */
+.modal-content  {
+  -webkit-border-radius: 0px !important;
+  -moz-border-radius: 0px !important;
+  border-radius: 0px !important;
+  border: none !important;
 }

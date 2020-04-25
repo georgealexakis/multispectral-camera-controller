@@ -19,7 +19,8 @@
     <div class="container">
       <div class="row status-bar">
         <div class="col-1 text-center">
-          <a class="btn btn-link" href="multi.html"><i id="signal" class="fas fa-th"></i></a>
+          <a class="btn btn-link" href="https://github.com/georgealexakis/multispectral-camera-controller"><i
+              id="signal" class="fas fa-home"></i></a>
         </div>
         <div class="col-1 text-center">
           <button type="button" class="btn btn-link" onclick="displayInfo()"><i class="fas fa-info"></i></button>
@@ -125,7 +126,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="setSingleSettings()">Connect</button>
+          <button type="button" class="btn btn-success" onclick="setSingleSettings()">Connect</button>
         </div>
       </div>
     </div>
@@ -188,15 +189,40 @@
               </div>
               <label for="auto-exposure" class="col-form-label">Auto Exposure</label>
             </div>
+            <p><small>*Choose the desired parameters and press save to save them.</small></p>
             <div class="form-group">
-              <button type="button" class="btn btn-primary btn-lg btn-block" onclick="synchronization()">Synchronize
+              <button type="button" class="btn btn-success btn-lg btn-block" onclick="synchronization()">Synchronize
                 Camera Parameters</button>
             </div>
+            <hr>
+            <div class="form-group">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons" onclick="setCTWRParameters(0)">
+                <label class="btn btn-secondary active bg41">
+                  <input type="radio" name="options4" id="onCrossTalk" autocomplete="off" checked> ON
+                </label>
+                <label class="btn btn-secondary bg42">
+                  <input type="radio" name="options4" id="offCrossTalk" autocomplete="off"> OFF
+                </label>
+              </div>
+              <label for="cross-talk" class="col-form-label">Cross-talk Correction</label>
+            </div>
+            <div class="form-group">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons" onclick="setCTWRParameters(1)">
+                <label class="btn btn-secondary active bg51">
+                  <input type="radio" name="options5" id="onWhiteReference" autocomplete="off" checked> ON
+                </label>
+                <label class="btn btn-secondary bg52">
+                  <input type="radio" name="options5" id="offWhiteReference" autocomplete="off"> OFF
+                </label>
+              </div>
+              <label for="white-reference" class="col-form-label">White Reference Normalization</label>
+            </div>
+            <p><small>*Cross-talk correction and white reference normalization don't need save to be set.</small></p>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" onclick="setParameters()">Save</button>
+          <button type="button" class="btn btn-success" onclick="setParameters()">Save</button>
         </div>
       </div>
     </div>
