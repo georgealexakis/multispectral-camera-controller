@@ -59,52 +59,12 @@ function connectSingle(URL) {
         name: originalImage,
         messageType: 'sensor_msgs/CompressedImage'
     });
-    // Receive base64 messages and add data:image/jpeg;base64, to show data
-    imageSubscriber.subscribe(function (msg) {
-        document.getElementById("originalImage").src = "data:image/jpeg;base64," + msg.data;
-        imageSubscriber.unsubscribe();
-    });
+
     // Subscribe to /camera_controller/feedback to receive camera feedback
     cameraFeedbackSubscriber = new ROSLIB.Topic({
         ros: ROS,
         name: '/camera_controller/feedback',
         messageType: 'std_msgs/String'
-    });
-    // Receive camera parameters feedback
-    cameraFeedbackSubscriber.subscribe(function (msg) {
-        var input = String(msg.data);
-        var inputParameters = input.split("-");
-        document.getElementById("inputExposure").value = parseInt(inputParameters[0]);
-        document.getElementById("inputPixelClock").value = parseInt(inputParameters[1]);
-        document.getElementById("inputFrameRate").value = parseInt(inputParameters[2]);
-        if (inputParameters[3] == "True") {
-            $(".bg11").button("toggle");
-            document.getElementById('onAutoWhiteBalance').checked = true;
-            document.getElementById('offAutoWhiteBalance').checked = false;
-        } else {
-            $(".bg12").button("toggle");
-            document.getElementById('onAutoWhiteBalance').checked = false;
-            document.getElementById('offAutoWhiteBalance').checked = true;
-        }
-        if (inputParameters[4] == "True") {
-            $(".bg21").button("toggle");
-            document.getElementById('onAutoFrameRate').checked = true;
-            document.getElementById('offAutoFrameRate').checked = false;
-        } else {
-            $(".bg22").button("toggle");
-            document.getElementById('onAutoFrameRate').checked = false;
-            document.getElementById('offAutoFrameRate').checked = true;
-        }
-        if (inputParameters[5] == "True") {
-            $(".bg31").button("toggle");
-            document.getElementById('onAutoExposure').checked = true;
-            document.getElementById('offAutoExposure').checked = false;
-        } else {
-            $(".bg32").button("toggle");
-            document.getElementById('onAutoExposure').checked = false;
-            document.getElementById('offAutoExposure').checked = true;
-        }
-        cameraFeedbackSubscriber.unsubscribe();
     });
     // Publish to /camera_settings the camera parameters cross-talk and white reference
     extraParametersPublisher = new ROSLIB.Topic({
@@ -120,6 +80,47 @@ function connectSingle(URL) {
     });
     setTimeout(function () { synchronization(); }, 2000);
 }
+// Receive base64 messages and add data:image/jpeg;base64, to show data
+imageSubscriber.subscribe(function (msg) {
+    document.getElementById("originalImage").src = "data:image/jpeg;base64," + msg.data;
+    imageSubscriber.unsubscribe();
+});
+// Receive camera parameters feedback
+cameraFeedbackSubscriber.subscribe(function (msg) {
+    var input = String(msg.data);
+    var inputParameters = input.split("-");
+    document.getElementById("inputExposure").value = parseInt(inputParameters[0]);
+    document.getElementById("inputPixelClock").value = parseInt(inputParameters[1]);
+    document.getElementById("inputFrameRate").value = parseInt(inputParameters[2]);
+    if (inputParameters[3] == "True") {
+        $(".bg11").button("toggle");
+        document.getElementById('onAutoWhiteBalance').checked = true;
+        document.getElementById('offAutoWhiteBalance').checked = false;
+    } else {
+        $(".bg12").button("toggle");
+        document.getElementById('onAutoWhiteBalance').checked = false;
+        document.getElementById('offAutoWhiteBalance').checked = true;
+    }
+    if (inputParameters[4] == "True") {
+        $(".bg21").button("toggle");
+        document.getElementById('onAutoFrameRate').checked = true;
+        document.getElementById('offAutoFrameRate').checked = false;
+    } else {
+        $(".bg22").button("toggle");
+        document.getElementById('onAutoFrameRate').checked = false;
+        document.getElementById('offAutoFrameRate').checked = true;
+    }
+    if (inputParameters[5] == "True") {
+        $(".bg31").button("toggle");
+        document.getElementById('onAutoExposure').checked = true;
+        document.getElementById('offAutoExposure').checked = false;
+    } else {
+        $(".bg32").button("toggle");
+        document.getElementById('onAutoExposure').checked = false;
+        document.getElementById('offAutoExposure').checked = true;
+    }
+    cameraFeedbackSubscriber.unsubscribe();
+});
 // Set camera parameters
 function setParameters() {
     if (connectStatus) {
