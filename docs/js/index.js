@@ -1,7 +1,6 @@
 // Initialize connection variable
-var connectStatus = false;
+var STATUS = false;
 // Variables for camera parameters
-var cameraFeedbackSubscriber;
 var exposure;
 var frameRate;
 var pixelClock;
@@ -13,7 +12,12 @@ var autoExposure1;
 var autoExposure2;
 var originalImage;
 var imageSubscriber;
+var feedbackSubscriber;
 // Initialize settings
+$(window).bind('beforeunload', function () {
+    imageSubscriber.unsubscribe();
+    feedbackSubscriber.unsubscribe();
+});
 init();
 function init() {
     $('#connectModal').modal('show');
@@ -41,17 +45,17 @@ function connectSingle(URL) {
     });
     ROS.on('connection', function () {
         document.getElementById("network").innerHTML = "connected";
-        connectStatus = true;
+        STATUS = true;
     });
     ROS.on('error', function (error) {
         document.getElementById("network").innerHTML = "error";
         document.getElementById("originalImage").src = "res/no-image.png"
-        connectStatus = false;
+        STATUS = false;
     });
     ROS.on('close', function () {
         document.getElementById("network").innerHTML = "closed";
         document.getElementById("originalImage").src = "res/no-image.png"
-        connectStatus = false;
+        STATUS = false;
     });
     // Subscribe to /camera/image_raw to receive compressed images
     imageSubscriber = new ROSLIB.Topic({
@@ -59,12 +63,51 @@ function connectSingle(URL) {
         name: originalImage,
         messageType: 'sensor_msgs/CompressedImage'
     });
-
+    // Receive base64 messages and add data:image/jpeg;base64, to show data
+    imageSubscriber.subscribe(function (msg) {
+        document.getElementById("originalImage").src = "data:image/jpeg;base64," + msg.data;
+    });
+    console.log(imageSubscriber);
     // Subscribe to /camera_controller/feedback to receive camera feedback
-    cameraFeedbackSubscriber = new ROSLIB.Topic({
+    feedbackSubscriber = new ROSLIB.Topic({
         ros: ROS,
         name: '/camera_controller/feedback',
         messageType: 'std_msgs/String'
+    });
+    // Receive camera parameters feedback
+    feedbackSubscriber.subscribe(function (msg) {
+        var input = String(msg.data);
+        var inputParameters = input.split("-");
+        document.getElementById("inputExposure").value = parseInt(inputParameters[0]);
+        document.getElementById("inputPixelClock").value = parseInt(inputParameters[1]);
+        document.getElementById("inputFrameRate").value = parseInt(inputParameters[2]);
+        if (inputParameters[3] == "True") {
+            $(".bg11").button("toggle");
+            document.getElementById('onAutoWhiteBalance').checked = true;
+            document.getElementById('offAutoWhiteBalance').checked = false;
+        } else {
+            $(".bg12").button("toggle");
+            document.getElementById('onAutoWhiteBalance').checked = false;
+            document.getElementById('offAutoWhiteBalance').checked = true;
+        }
+        if (inputParameters[4] == "True") {
+            $(".bg21").button("toggle");
+            document.getElementById('onAutoFrameRate').checked = true;
+            document.getElementById('offAutoFrameRate').checked = false;
+        } else {
+            $(".bg22").button("toggle");
+            document.getElementById('onAutoFrameRate').checked = false;
+            document.getElementById('offAutoFrameRate').checked = true;
+        }
+        if (inputParameters[5] == "True") {
+            $(".bg31").button("toggle");
+            document.getElementById('onAutoExposure').checked = true;
+            document.getElementById('offAutoExposure').checked = false;
+        } else {
+            $(".bg32").button("toggle");
+            document.getElementById('onAutoExposure').checked = false;
+            document.getElementById('offAutoExposure').checked = true;
+        }
     });
     // Publish to /camera_settings the camera parameters cross-talk and white reference
     extraParametersPublisher = new ROSLIB.Topic({
@@ -80,50 +123,9 @@ function connectSingle(URL) {
     });
     setTimeout(function () { synchronization(); }, 2000);
 }
-// Receive base64 messages and add data:image/jpeg;base64, to show data
-imageSubscriber.subscribe(function (msg) {
-    document.getElementById("originalImage").src = "data:image/jpeg;base64," + msg.data;
-    imageSubscriber.unsubscribe();
-});
-// Receive camera parameters feedback
-cameraFeedbackSubscriber.subscribe(function (msg) {
-    var input = String(msg.data);
-    var inputParameters = input.split("-");
-    document.getElementById("inputExposure").value = parseInt(inputParameters[0]);
-    document.getElementById("inputPixelClock").value = parseInt(inputParameters[1]);
-    document.getElementById("inputFrameRate").value = parseInt(inputParameters[2]);
-    if (inputParameters[3] == "True") {
-        $(".bg11").button("toggle");
-        document.getElementById('onAutoWhiteBalance').checked = true;
-        document.getElementById('offAutoWhiteBalance').checked = false;
-    } else {
-        $(".bg12").button("toggle");
-        document.getElementById('onAutoWhiteBalance').checked = false;
-        document.getElementById('offAutoWhiteBalance').checked = true;
-    }
-    if (inputParameters[4] == "True") {
-        $(".bg21").button("toggle");
-        document.getElementById('onAutoFrameRate').checked = true;
-        document.getElementById('offAutoFrameRate').checked = false;
-    } else {
-        $(".bg22").button("toggle");
-        document.getElementById('onAutoFrameRate').checked = false;
-        document.getElementById('offAutoFrameRate').checked = true;
-    }
-    if (inputParameters[5] == "True") {
-        $(".bg31").button("toggle");
-        document.getElementById('onAutoExposure').checked = true;
-        document.getElementById('offAutoExposure').checked = false;
-    } else {
-        $(".bg32").button("toggle");
-        document.getElementById('onAutoExposure').checked = false;
-        document.getElementById('offAutoExposure').checked = true;
-    }
-    cameraFeedbackSubscriber.unsubscribe();
-});
 // Set camera parameters
 function setParameters() {
-    if (connectStatus) {
+    if (STATUS) {
         exposure = document.getElementById('inputExposure').value;
         pixelClock = document.getElementById('inputPixelClock').value;
         frameRate = document.getElementById('inputFrameRate').value;
@@ -154,7 +156,7 @@ function setParameters() {
 }
 // Set cross-talk and white reference
 function setCTWRParameters(choice) {
-    if (connectStatus) {
+    if (STATUS) {
         var parametersData = 0;
         if (choice == 0) {
             parametersData = 1;
