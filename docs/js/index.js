@@ -14,13 +14,9 @@ var originalImage;
 var imageSubscriber;
 var feedbackSubscriber;
 // Initialize settings
-$(window).bind('beforeunload', function () {
-    imageSubscriber.unsubscribe();
-    feedbackSubscriber.unsubscribe();
-});
 init();
 function init() {
-    $('#connectModal').modal('show');
+    $("#connectModal").modal("show");
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
@@ -30,29 +26,29 @@ function init() {
 }
 // Modify settings
 function setSingleSettings() {
-    var URL = 'ws://' + document.getElementById('inputIP').value + ':9090';
-    originalImage = document.getElementById('originalImageTopic').value;
+    var URL = "ws://" + document.getElementById("inputIP").value + ":9090";
+    originalImage = document.getElementById("originalImageTopic").value;
     document.getElementById("IP").innerHTML = URL;
-    $('#connectModal').modal('hide');
+    $("#connectModal").modal("hide");
     connectSingle(URL);
 }
 // Connect with ROS
 function connectSingle(URL) {
     var ROS;
-    // ROS connection states
+    // ROS connection status
     ROS = new ROSLIB.Ros({
         url: URL
     });
-    ROS.on('connection', function () {
+    ROS.on("connection", function () {
         document.getElementById("network").innerHTML = "connected";
         STATUS = true;
     });
-    ROS.on('error', function (error) {
+    ROS.on("error", function (error) {
         document.getElementById("network").innerHTML = "error";
         document.getElementById("originalImage").src = "res/no-image.png"
         STATUS = false;
     });
-    ROS.on('close', function () {
+    ROS.on("close", function () {
         document.getElementById("network").innerHTML = "closed";
         document.getElementById("originalImage").src = "res/no-image.png"
         STATUS = false;
@@ -61,7 +57,7 @@ function connectSingle(URL) {
     imageSubscriber = new ROSLIB.Topic({
         ros: ROS,
         name: originalImage,
-        messageType: 'sensor_msgs/CompressedImage'
+        messageType: "sensor_msgs/CompressedImage"
     });
     // Receive base64 messages and add data:image/jpeg;base64, to show data
     imageSubscriber.subscribe(function (msg) {
@@ -71,8 +67,8 @@ function connectSingle(URL) {
     // Subscribe to /camera_controller/feedback to receive camera feedback
     feedbackSubscriber = new ROSLIB.Topic({
         ros: ROS,
-        name: '/camera_controller/feedback',
-        messageType: 'std_msgs/String'
+        name: "/camera_controller/feedback",
+        messageType: "std_msgs/String"
     });
     // Receive camera parameters feedback
     feedbackSubscriber.subscribe(function (msg) {
@@ -83,58 +79,58 @@ function connectSingle(URL) {
         document.getElementById("inputFrameRate").value = parseInt(inputParameters[2]);
         if (inputParameters[3] == "True") {
             $(".bg11").button("toggle");
-            document.getElementById('onAutoWhiteBalance').checked = true;
-            document.getElementById('offAutoWhiteBalance').checked = false;
+            document.getElementById("onAutoWhiteBalance").checked = true;
+            document.getElementById("offAutoWhiteBalance").checked = false;
         } else {
             $(".bg12").button("toggle");
-            document.getElementById('onAutoWhiteBalance').checked = false;
-            document.getElementById('offAutoWhiteBalance').checked = true;
+            document.getElementById("onAutoWhiteBalance").checked = false;
+            document.getElementById("offAutoWhiteBalance").checked = true;
         }
         if (inputParameters[4] == "True") {
             $(".bg21").button("toggle");
-            document.getElementById('onAutoFrameRate').checked = true;
-            document.getElementById('offAutoFrameRate').checked = false;
+            document.getElementById("onAutoFrameRate").checked = true;
+            document.getElementById("offAutoFrameRate").checked = false;
         } else {
             $(".bg22").button("toggle");
-            document.getElementById('onAutoFrameRate').checked = false;
-            document.getElementById('offAutoFrameRate').checked = true;
+            document.getElementById("onAutoFrameRate").checked = false;
+            document.getElementById("offAutoFrameRate").checked = true;
         }
         if (inputParameters[5] == "True") {
             $(".bg31").button("toggle");
-            document.getElementById('onAutoExposure').checked = true;
-            document.getElementById('offAutoExposure').checked = false;
+            document.getElementById("onAutoExposure").checked = true;
+            document.getElementById("offAutoExposure").checked = false;
         } else {
             $(".bg32").button("toggle");
-            document.getElementById('onAutoExposure').checked = false;
-            document.getElementById('offAutoExposure').checked = true;
+            document.getElementById("onAutoExposure").checked = false;
+            document.getElementById("offAutoExposure").checked = true;
         }
     });
     // Publish to /camera_settings the camera parameters cross-talk and white reference
     extraParametersPublisher = new ROSLIB.Topic({
         ros: ROS,
         name: "/camera_settings",
-        messageType: 'std_msgs/Int8'
+        messageType: "std_msgs/Int8"
     });
     // Publish to /camera_controller the camera parameters
     parametersPublisher = new ROSLIB.Topic({
         ros: ROS,
         name: "/camera_controller",
-        messageType: 'std_msgs/String'
+        messageType: "std_msgs/String"
     });
     setTimeout(function () { synchronization(); }, 2000);
 }
 // Set camera parameters
 function setParameters() {
     if (STATUS) {
-        exposure = document.getElementById('inputExposure').value;
-        pixelClock = document.getElementById('inputPixelClock').value;
-        frameRate = document.getElementById('inputFrameRate').value;
-        autoWhiteBalance1 = document.getElementById('onAutoWhiteBalance').checked;
-        autoWhiteBalance2 = document.getElementById('offAutoWhiteBalance').checked;
-        autoFrameRate1 = document.getElementById('onAutoFrameRate').checked;
-        autoFrameRate2 = document.getElementById('offAutoFrameRate').checked;
-        autoExposure1 = document.getElementById('onAutoExposure').checked;
-        autoExposure2 = document.getElementById('offAutoExposure').checked;
+        exposure = document.getElementById("inputExposure").value;
+        pixelClock = document.getElementById("inputPixelClock").value;
+        frameRate = document.getElementById("inputFrameRate").value;
+        autoWhiteBalance1 = document.getElementById("onAutoWhiteBalance").checked;
+        autoWhiteBalance2 = document.getElementById("offAutoWhiteBalance").checked;
+        autoFrameRate1 = document.getElementById("onAutoFrameRate").checked;
+        autoFrameRate2 = document.getElementById("offAutoFrameRate").checked;
+        autoExposure1 = document.getElementById("onAutoExposure").checked;
+        autoExposure2 = document.getElementById("offAutoExposure").checked;
         var awb = "False";
         var afr = "False";
         var aex = "False";
@@ -179,14 +175,14 @@ function reconnect() {
 }
 // Dispaly parameters panel
 function changeParameters() {
-    $('#parametersModal').modal('show');
+    $("#parametersModal").modal("show");
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
 }
 // Display information panel
 function displayInfo() {
-    $('#infoModal').modal('show');
+    $("#infoModal").modal("show");
     $(function () {
         $('[data-toggle="tooltip"]').tooltip()
     });
@@ -198,3 +194,12 @@ function synchronization() {
     });
     parametersPublisher.publish(parameters);
 }
+// Shut down everything
+$(window).bind("beforeunload", function () {
+    if (imageSubscriber) {
+        imageSubscriber.unsubscribe();
+    }
+    if (feedbackSubscriber) {
+        feedbackSubscriber.unsubscribe();
+    }
+});
