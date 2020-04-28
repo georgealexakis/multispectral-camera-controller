@@ -12,7 +12,7 @@ var autoFrameRate2;
 var autoExposure1;
 var autoExposure2;
 var originalImage;
-var originalImageSubscriber;
+var imageSubscriber;
 // Initialize settings
 init();
 function init() {
@@ -54,14 +54,15 @@ function connectSingle(URL) {
         connectStatus = false;
     });
     // Subscribe to /camera/image_raw to receive compressed images
-    originalImageSubscriber = new ROSLIB.Topic({
+    imageSubscriber = new ROSLIB.Topic({
         ros: ROS,
         name: originalImage,
         messageType: 'sensor_msgs/CompressedImage'
     });
     // Receive base64 messages and add data:image/jpeg;base64, to show data
-    originalImageSubscriber.subscribe(function (msg) {
+    imageSubscriber.subscribe(function (msg) {
         document.getElementById("originalImage").src = "data:image/jpeg;base64," + msg.data;
+        imageSubscriber.unsubscribe();
     });
     // Subscribe to /camera_controller/feedback to receive camera feedback
     cameraFeedbackSubscriber = new ROSLIB.Topic({
@@ -103,6 +104,7 @@ function connectSingle(URL) {
             document.getElementById('onAutoExposure').checked = false;
             document.getElementById('offAutoExposure').checked = true;
         }
+        cameraFeedbackSubscriber.unsubscribe();
     });
     // Publish to /camera_settings the camera parameters cross-talk and white reference
     extraParametersPublisher = new ROSLIB.Topic({
