@@ -108,7 +108,7 @@ function connectSingle(URL) {
     extraParametersPublisher = new ROSLIB.Topic({
         ros: ROS,
         name: "/camera_settings",
-        messageType: 'std_msgs/Int'
+        messageType: 'std_msgs/Int8'
     });
     // Publish to /camera_controller the camera parameters
     parametersPublisher = new ROSLIB.Topic({
