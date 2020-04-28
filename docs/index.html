@@ -196,23 +196,23 @@
             </div>
             <hr>
             <div class="form-group">
-              <div class="btn-group btn-group-toggle" data-toggle="buttons" onclick="setCTWRParameters(0)">
-                <label class="btn btn-secondary active bg41">
-                  <input type="radio" name="options4" id="onCrossTalk" autocomplete="off" checked> ON
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active bg41" onclick="setCTWRParameters(0)">
+                  <input type="radio" name="options4" id="onCrossTalk" autocomplete="off"> ON
                 </label>
-                <label class="btn btn-secondary bg42">
-                  <input type="radio" name="options4" id="offCrossTalk" autocomplete="off"> OFF
+                <label class="btn btn-secondary bg42" onclick="setCTWRParameters(1)">
+                  <input type="radio" name="options4" id="offCrossTalk" autocomplete="off" checked> OFF
                 </label>
               </div>
               <label for="cross-talk" class="col-form-label">Cross-talk Correction</label>
             </div>
             <div class="form-group">
-              <div class="btn-group btn-group-toggle" data-toggle="buttons" onclick="setCTWRParameters(1)">
-                <label class="btn btn-secondary active bg51">
-                  <input type="radio" name="options5" id="onWhiteReference" autocomplete="off" checked> ON
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active bg51" onclick="setCTWRParameters(2)">
+                  <input type="radio" name="options5" id="onWhiteReference" autocomplete="off"> ON
                 </label>
-                <label class="btn btn-secondary bg52">
-                  <input type="radio" name="options5" id="offWhiteReference" autocomplete="off"> OFF
+                <label class="btn btn-secondary bg52" onclick="setCTWRParameters(3)">
+                  <input type="radio" name="options5" id="offWhiteReference" autocomplete="off" checked> OFF
                 </label>
               </div>
               <label for="white-reference" class="col-form-label">White Reference Normalization</label>

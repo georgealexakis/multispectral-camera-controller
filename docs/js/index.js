@@ -1,6 +1,5 @@
 // Initialize connection variable
 var connectStatus = false;
-
 // Variables for camera parameters
 var cameraFeedbackSubscriber;
 var exposure;
@@ -14,7 +13,6 @@ var autoExposure1;
 var autoExposure2;
 var originalImage;
 var originalImageSubscriber;
-
 // Initialize settings
 init();
 function init() {
@@ -24,13 +22,8 @@ function init() {
     });
     // Set cross-talk and white refernece to off
     $(".bg42").button("toggle");
-    document.getElementById('onCrossTalk').checked = false;
-    document.getElementById('offCrossTalk').checked = true;
     $(".bg52").button("toggle");
-    document.getElementById('onWhiteReference').checked = false;
-    document.getElementById('offWhiteReference').checked = true;
 }
-
 // Modify settings
 function setSingleSettings() {
     var URL = 'ws://' + document.getElementById('inputIP').value + ':9090';
@@ -39,7 +32,6 @@ function setSingleSettings() {
     $('#connectModal').modal('hide');
     connectSingle(URL);
 }
-
 // Connect with ROS
 function connectSingle(URL) {
     var ROS;
@@ -116,7 +108,7 @@ function connectSingle(URL) {
     extraParametersPublisher = new ROSLIB.Topic({
         ros: ROS,
         name: "/camera_settings",
-        messageType: 'std_msgs/String'
+        messageType: 'std_msgs/Int'
     });
     // Publish to /camera_controller the camera parameters
     parametersPublisher = new ROSLIB.Topic({
@@ -126,7 +118,6 @@ function connectSingle(URL) {
     });
     setTimeout(function () { synchronization(); }, 2000);
 }
-
 // Set camera parameters
 function setParameters() {
     if (connectStatus) {
@@ -158,27 +149,18 @@ function setParameters() {
         parametersPublisher.publish(parameters);
     }
 }
-
 // Set cross-talk and white reference
 function setCTWRParameters(choice) {
     if (connectStatus) {
-        var parametersData = "00";
+        var parametersData = 0;
         if (choice == 0) {
-            b1 = document.getElementById('onCrossTalk').checked;
-            b2 = document.getElementById('offCrossTalk').checked;
-            if (b1 && !b2) {
-                parameters = "00";
-            } else {
-                parameters = "01";
-            }
-        } else {
-            b3 = document.getElementById('onWhiteReference').checked;
-            b4 = document.getElementById('offWhiteReference').checked;
-            if (b3 && !b4) {
-                parameters = "10";
-            } else {
-                parameters = "11";
-            }
+            parametersData = 1;
+        } else if (choice == 1) {
+            parametersData = 0;
+        } else if (choice == 2) {
+            parametersData = 11;
+        } else if (choice == 3) {
+            parametersData = 10;
         }
         var parameters = new ROSLIB.Message({
             data: parametersData
@@ -186,12 +168,10 @@ function setCTWRParameters(choice) {
         extraParametersPublisher.publish(parameters);
     }
 }
-
 // Reconnect client
 function reconnect() {
     location.reload();
 }
-
 // Dispaly parameters panel
 function changeParameters() {
     $('#parametersModal').modal('show');
@@ -199,7 +179,6 @@ function changeParameters() {
         $('[data-toggle="tooltip"]').tooltip()
     });
 }
-
 // Display information panel
 function displayInfo() {
     $('#infoModal').modal('show');
@@ -207,7 +186,6 @@ function displayInfo() {
         $('[data-toggle="tooltip"]').tooltip()
     });
 }
-
 // Camera parameters synchronization
 function synchronization() {
     var parameters = new ROSLIB.Message({
