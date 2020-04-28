@@ -63,7 +63,6 @@ function connectSingle(URL) {
     imageSubscriber.subscribe(function (msg) {
         document.getElementById("originalImage").src = "data:image/jpeg;base64," + msg.data;
     });
-    console.log(imageSubscriber);
     // Subscribe to /camera_controller/feedback to receive camera feedback
     feedbackSubscriber = new ROSLIB.Topic({
         ros: ROS,
