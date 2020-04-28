@@ -162,7 +162,7 @@ function setParameters() {
 // Set cross-talk and white reference
 function setCTWRParameters(choice) {
     if (connectStatus) {
-        var parameters = "00";
+        var parametersData = "00";
         if (choice == 0) {
             b1 = document.getElementById('onCrossTalk').checked;
             b2 = document.getElementById('offCrossTalk').checked;
