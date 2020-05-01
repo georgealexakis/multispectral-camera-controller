@@ -158,9 +158,9 @@ function setCTWRParameters(choice) {
         } else if (choice == 1) {
             parametersData = 0;
         } else if (choice == 2) {
-            parametersData = 11;
+            parametersData = 41;
         } else if (choice == 3) {
-            parametersData = 10;
+            parametersData = 40;
         }
         var parameters = new ROSLIB.Message({
             data: parametersData
