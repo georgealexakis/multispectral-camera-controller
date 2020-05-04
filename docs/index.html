@@ -50,12 +50,11 @@
     </div>
   </main>
 
-  <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="robotInformationLabel"
-    aria-hidden="true">
+  <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="ros-info" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="robotInformationLabel">Information</h5>
+          <h5 class="modal-title" id="ros-info">Information</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -74,10 +73,24 @@
             project enables the reconfiguration of camera parameters such as exposure, frame rate etc. Especially this
             project is used for multispectral camera with 9 bands.</p>
           <p>Camera parameters can be change with this application such as frame rate, exposure, etc. It converts
-            parameter list into string and send it to the node and waits the same structure as feedback. Transmitted
-            string example:
-            "10-55-30-False-True-True". It supports the
-            display of multiple images.</p>
+            parameter list into string and send it to the node and waits the same structure as feedback. Also, it
+            enables the contoll of multiple software functions.</p>
+          <hr>
+          <h5>Topics</h5>
+          <ol class="list-group">
+            <li class="list-group-item">
+              <p>Input image topic that it should be compressed.</p>
+            </li>
+            <li class="list-group-item">
+              <p>/camera_controller/feedback: Feedback of camera parameters for synchronization..</p>
+            </li>
+            <li class="list-group-item">
+              <p>/camera_settings: Codes to enable multiple functions.</p>
+            </li>
+            <li class="list-group-item">
+              <p>/camera_controller: String to send camera parameters. Example: "10-55-30-False-True-True".</p>
+            </li>
+          </ol>
           <hr>
           <h5>Setup</h5>
           <ol class="list-group">
@@ -102,12 +115,11 @@
     </div>
   </div>
 
-  <div class="modal fade" id="connectModal" tabindex="-1" role="dialog" aria-labelledby="robotInformationLabel"
-    aria-hidden="true">
+  <div class="modal fade" id="connectModal" tabindex="-1" role="dialog" aria-labelledby="ros-login" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="robotInformationLabel">ROS Connection Settings</h5>
+          <h5 class="modal-title" id="ros-login">ROS Connection Settings</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -116,28 +128,49 @@
           <form>
             <div class="form-group">
               <label for="inputIP" class="col-form-label">ROS IP:</label>
-              <input type="text" class="form-control" id="inputIP" value="192.168.101.44">
+              <input type="text" class="form-control" id="inputIP" placeholder="Type IP (localhost is valid)"
+                value="localhost">
             </div>
             <div class="form-group">
-              <label for="originalImageTopic" class="col-form-label">Original Image Topic (Only compressed):</label>
-              <input type="text" class="form-control" id="originalImageTopic" value="/camera/image_raw/compressed">
+              <label for="imageTopic" class="col-form-label">Image Topic (only compressed):</label>
+              <input type="text" class="form-control" id="imageTopic" list="topics"
+                placeholder="Choose topic from list or type it">
+              <datalist id="topics">
+                <option>/camera/image_raw/compressed</option>
+                <option>/band/1/image_raw/compressed</option>
+                <option>/band/2/image_raw/compressed</option>
+                <option>/band/3/image_raw/compressed</option>
+                <option>/band/4/image_raw/compressed</option>
+                <option>/band/5/image_raw/compressed</option>
+                <option>/band/6/image_raw/compressed</option>
+                <option>/band/7/image_raw/compressed</option>
+                <option>/band/8/image_raw/compressed</option>
+                <option>/band/9/image_raw/compressed</option>
+                <option>/band/9/interpolated/image_raw/compressed</option>
+                <option>/band/ndvi/image_raw/compressed</option>
+                <option>/band/ndvi_colored/image_raw/compressed</option>
+                <option>/camera/cross_talk/image_raw/compressed</option>
+                <option>/camera/flat_field/image_raw/compressed</option>
+                <option>/camera/white_reference/image_raw/compressed</option>
+              </datalist>
             </div>
+            <small class="text-danger" id="connect-warning"></small>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-success" onclick="setSingleSettings()">Connect</button>
+          <button type="button" class="btn btn-success" onclick="connectToROS()">Connect</button>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="modal fade" id="parametersModal" tabindex="-1" role="dialog" aria-labelledby="robotInformationLabel"
+  <div class="modal fade" id="parametersModal" tabindex="-1" role="dialog" aria-labelledby="ros-parameters"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="robotInformationLabel">ROS Parameter Settings</h5>
+          <h5 class="modal-title" id="ros-parameters">ROS Parameter Settings</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -217,7 +250,8 @@
               </div>
               <label for="white-reference" class="col-form-label">White Reference Normalization</label>
             </div>
-            <p><small>*Cross-talk correction and white reference normalization don't need save to be set.</small></p>
+            <small>*Cross-talk correction and white reference normalization don't need save to be set.</small>
+            <small class="text-danger" id="warning"></small>
           </form>
         </div>
         <div class="modal-footer">

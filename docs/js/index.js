@@ -4,13 +4,14 @@ var STATUS = false;
 var exposure;
 var frameRate;
 var pixelClock;
-var autoWhiteBalance1;
-var autoWhiteBalance2;
-var autoFrameRate1;
-var autoFrameRate2;
-var autoExposure1;
-var autoExposure2;
-var originalImage;
+var AWB1;
+var AWB2;
+var AFR1;
+var AFR2;
+var AE1;
+var AE2;
+var IMAGE;
+var ROSURL;
 var imageSubscriber;
 var feedbackSubscriber;
 // Initialize settings
@@ -25,15 +26,24 @@ function init() {
     $(".bg52").button("toggle");
 }
 // Modify settings
-function setSingleSettings() {
-    var URL = "ws://" + document.getElementById("inputIP").value + ":9090";
-    originalImage = document.getElementById("originalImageTopic").value;
-    document.getElementById("IP").innerHTML = URL;
-    $("#connectModal").modal("hide");
-    connectSingle(URL);
+function connectToROS() {
+    // Get inputs
+    if (document.getElementById("inputIP").value !== "" && document.getElementById("imageTopic").value !== "") {
+        ROSURL = "ws://" + document.getElementById("inputIP").value + ":9090";
+        IMAGE = document.getElementById("imageTopic").value;
+        // Set information
+        document.getElementById("IP").innerHTML = ROSURL;
+        $("#connectModal").modal("hide");
+        // Start connection
+        connect(ROSURL);
+    } else {
+        // Display warning
+        document.getElementById("connect-warning").innerHTML = "*Both inputs must be filled out.";
+        setTimeout(function () { document.getElementById("connect-warning").innerHTML = ""; }, 2000);
+    }
 }
 // Connect with ROS
-function connectSingle(URL) {
+function connect(URL) {
     var ROS;
     // ROS connection status
     ROS = new ROSLIB.Ros({
@@ -56,7 +66,7 @@ function connectSingle(URL) {
     // Subscribe to /camera/image_raw to receive compressed images
     imageSubscriber = new ROSLIB.Topic({
         ros: ROS,
-        name: originalImage,
+        name: IMAGE,
         messageType: "sensor_msgs/CompressedImage"
     });
     // Receive base64 messages and add data:image/jpeg;base64, to show data
@@ -124,22 +134,22 @@ function setParameters() {
         exposure = document.getElementById("inputExposure").value;
         pixelClock = document.getElementById("inputPixelClock").value;
         frameRate = document.getElementById("inputFrameRate").value;
-        autoWhiteBalance1 = document.getElementById("onAutoWhiteBalance").checked;
-        autoWhiteBalance2 = document.getElementById("offAutoWhiteBalance").checked;
-        autoFrameRate1 = document.getElementById("onAutoFrameRate").checked;
-        autoFrameRate2 = document.getElementById("offAutoFrameRate").checked;
-        autoExposure1 = document.getElementById("onAutoExposure").checked;
-        autoExposure2 = document.getElementById("offAutoExposure").checked;
+        AWB1 = document.getElementById("onAutoWhiteBalance").checked;
+        AWB2 = document.getElementById("offAutoWhiteBalance").checked;
+        AFR1 = document.getElementById("onAutoFrameRate").checked;
+        AFR2 = document.getElementById("offAutoFrameRate").checked;
+        AE1 = document.getElementById("onAutoExposure").checked;
+        AE2 = document.getElementById("offAutoExposure").checked;
         var awb = "False";
         var afr = "False";
         var aex = "False";
-        if (autoWhiteBalance1 && !autoWhiteBalance2) {
+        if (AWB1 && !AWB2) {
             awb = "True";
         }
-        if (autoFrameRate1 && !autoFrameRate2) {
+        if (AFR1 && !AFR2) {
             afr = "True";
         }
-        if (autoExposure1 && !autoExposure2) {
+        if (AE1 && !AE2) {
             aex = "True";
         }
         var parametersData = exposure + "-" + pixelClock + "-" + frameRate + "-" + awb + "-" + afr + "-" + aex;
@@ -147,9 +157,11 @@ function setParameters() {
             data: parametersData
         });
         parametersPublisher.publish(parameters);
+    } else {
+        setWarning();
     }
 }
-// Set cross-talk and white reference
+// Set cross-talk and white reference. It is able to add more choices
 function setCTWRParameters(choice) {
     if (STATUS) {
         var parametersData = 0;
@@ -166,6 +178,8 @@ function setCTWRParameters(choice) {
             data: parametersData
         });
         extraParametersPublisher.publish(parameters);
+    } else {
+        setWarning();
     }
 }
 // Reconnect client
@@ -188,10 +202,19 @@ function displayInfo() {
 }
 // Camera parameters synchronization
 function synchronization() {
-    var parameters = new ROSLIB.Message({
-        data: "sync"
-    });
-    parametersPublisher.publish(parameters);
+    if (STATUS) {
+        var parameters = new ROSLIB.Message({
+            data: "sync"
+        });
+        parametersPublisher.publish(parameters);
+    } else {
+        setWarning();
+    }
+}
+// Display warning
+function setWarning() {
+    document.getElementById("warning").innerHTML = "*Be sure that the application is connected with ROS.";
+    setTimeout(function () { document.getElementById("warning").innerHTML = ""; }, 2000);
 }
 // Shut down everything
 $(window).bind("beforeunload", function () {
