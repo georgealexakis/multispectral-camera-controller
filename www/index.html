@@ -230,10 +230,10 @@
             <hr>
             <div class="form-group">
               <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-secondary active bg41" onclick="setCTWRParameters(0)">
+                <label class="btn btn-secondary active bg41" onclick="setAction(1)">
                   <input type="radio" name="options4" id="onCrossTalk" autocomplete="off"> ON
                 </label>
-                <label class="btn btn-secondary bg42" onclick="setCTWRParameters(1)">
+                <label class="btn btn-secondary bg42" onclick="setAction(0)">
                   <input type="radio" name="options4" id="offCrossTalk" autocomplete="off" checked> OFF
                 </label>
               </div>
@@ -241,16 +241,61 @@
             </div>
             <div class="form-group">
               <div class="btn-group btn-group-toggle" data-toggle="buttons">
-                <label class="btn btn-secondary active bg51" onclick="setCTWRParameters(2)">
-                  <input type="radio" name="options5" id="onWhiteReference" autocomplete="off"> ON
+                <label class="btn btn-secondary active bg51" onclick="setAction(10)">
+                  <input type="radio" name="options5" id="onFlatField" autocomplete="off"> ON
                 </label>
-                <label class="btn btn-secondary bg52" onclick="setCTWRParameters(3)">
-                  <input type="radio" name="options5" id="offWhiteReference" autocomplete="off" checked> OFF
+                <label class="btn btn-secondary bg52" onclick="setAction(11)">
+                  <input type="radio" name="options5" id="offFlatField" autocomplete="off" checked> OFF
+                </label>
+              </div>
+              <label for="flat-field" class="col-form-label">Flat-field Correction</label>
+            </div>
+            <div class="form-group">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active bg61" onclick="setAction(20)">
+                  <input type="radio" name="options6" id="onFlatFieldCapture" autocomplete="off"> ON
+                </label>
+                <label class="btn btn-secondary bg62" onclick="setAction(21)">
+                  <input type="radio" name="options6" id="offFlatFieldCapture" autocomplete="off" checked> OFF
+                </label>
+              </div>
+              <label for="flat-filed-capture" class="col-form-label">Flat-filed Image Capture</label>
+            </div>
+            <div class="form-group">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active bg71" onclick="setAction(30)">
+                  <input type="radio" name="options7" id="onDarkFieldCapture" autocomplete="off"> ON
+                </label>
+                <label class="btn btn-secondary bg72" onclick="setAction(31)">
+                  <input type="radio" name="options7" id="offDarkFieldCapture" autocomplete="off" checked> OFF
+                </label>
+              </div>
+              <label for="dark-filed-capture" class="col-form-label">Dark-filed Image Capture</label>
+            </div>
+            <div class="form-group">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active bg81" onclick="setAction(40)">
+                  <input type="radio" name="options8" id="onWhiteReference" autocomplete="off"> ON
+                </label>
+                <label class="btn btn-secondary bg82" onclick="setAction(41)">
+                  <input type="radio" name="options8" id="offWhiteReference" autocomplete="off" checked> OFF
                 </label>
               </div>
               <label for="white-reference" class="col-form-label">White Reference Normalization</label>
             </div>
-            <small>*Cross-talk correction and white reference normalization don't need save to be set.</small>
+            <div class="form-group">
+              <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                <label class="btn btn-secondary active bg91" onclick="setAction(50)">
+                  <input type="radio" name="options9" id="onNDVI" autocomplete="off"> ON
+                </label>
+                <label class="btn btn-secondary bg92" onclick="setAction(51)">
+                  <input type="radio" name="options9" id="offNDVI" autocomplete="off" checked> OFF
+                </label>
+              </div>
+              <label for="ndvi" class="col-form-label">NDVI</label>
+            </div>
+            <small>*The second options don't need save to be set.</small>
+            <br>
             <small class="text-danger" id="warning"></small>
           </form>
         </div>

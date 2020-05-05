@@ -18,12 +18,6 @@ var feedbackSubscriber;
 init();
 function init() {
     $("#connectModal").modal("show");
-    $(function () {
-        $('[data-toggle="tooltip"]').tooltip()
-    });
-    // Set cross-talk and white refernece to off
-    $(".bg42").button("toggle");
-    $(".bg52").button("toggle");
 }
 // Modify settings
 function connectToROS() {
@@ -161,21 +155,11 @@ function setParameters() {
         setWarning();
     }
 }
-// Set cross-talk and white reference. It is able to add more choices
-function setCTWRParameters(choice) {
+// Set actions. It is able to add more actions in the future
+function setAction(choice) {
     if (STATUS) {
-        var parametersData = 0;
-        if (choice == 0) {
-            parametersData = 1;
-        } else if (choice == 1) {
-            parametersData = 0;
-        } else if (choice == 2) {
-            parametersData = 41;
-        } else if (choice == 3) {
-            parametersData = 40;
-        }
         var parameters = new ROSLIB.Message({
-            data: parametersData
+            data: choice
         });
         extraParametersPublisher.publish(parameters);
     } else {
@@ -216,7 +200,7 @@ function setWarning() {
     document.getElementById("warning").innerHTML = "*Be sure that the application is connected with ROS.";
     setTimeout(function () { document.getElementById("warning").innerHTML = ""; }, 2000);
 }
-// Shut down everything
+// Shut down everything before leave
 $(window).bind("beforeunload", function () {
     if (imageSubscriber) {
         imageSubscriber.unsubscribe();

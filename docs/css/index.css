@@ -53,3 +53,7 @@ p {
   border-radius: 0px !important;
   border: none !important;
 }
+
+.modal-dialog {
+  max-width: 50% !important;
+}
