@@ -26,3 +26,7 @@ Camera parameters can be change with this application such as frame rate, exposu
 
 /docs folder contains the files for github pages. Just ignore it or delete it.
 /www folder contains the main project files.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
