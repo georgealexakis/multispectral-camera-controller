@@ -1,6 +1,6 @@
 # Multispectral camera controller
 
-Experimental application for multispectral cameras and ROS. It connects with ROS client API for camera reconfiguration. For this implementation, it has used multispectral camera CMS-V1-C-EVR1M-GigE from SILIOS Technologies.
+Experimental application for multispectral cameras and ROS. It connects with ROS client API for camera reconfiguration. For this implementation, it has used multispectral camera CMS-V1-C-EVR1M-GigE from [SILIOS Technologies](https://www.silios.com/).
  
 ## Description
 
@@ -14,18 +14,18 @@ Camera parameters can be change with this application such as frame rate, exposu
 
 ### Subscribed Topics
 
-- Input image topic that it should be compressed.
-- /camera_controller/feedback: Feedback of camera parameters for synchronization.
+* Input image topic that it should be compressed.
+* /camera_controller/feedback: Feedback of camera parameters for synchronization.
 
 ### Published Topics
 
-- /camera_settings: Codes to enable multiple functions.
-- /camera_controller: String to send camera parameters. Example: "10-55-30-False-True-True".
+* /camera_settings: Codes to enable multiple functions.
+* /camera_controller: String to send camera parameters. Example: "10-55-30-False-True-True".
 
 ## Folders
 
-/docs folder contains the files for github pages. Just ignore it or delete it.
-/www folder contains the main project files.
+* [/docs](https://github.com/georgealexakis/multispectral-camera-controller/tree/master/docs) folder contains the files for github pages. Just ignore it or delete it.
+* [/www](https://github.com/georgealexakis/multispectral-camera-controller/tree/master/www) folder contains the main project files.
 
 ## License
 
