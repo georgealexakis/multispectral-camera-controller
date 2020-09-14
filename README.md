@@ -2,6 +2,20 @@
 
 Multispectral Camera Controller is a Web Application, for remote controlling and monitoring of a robot that runs ROS and is equipped with a multispectral cameras. It connects with ROS client API for camera reconfiguration. For this implementation, it has been used multispectral camera CMS-V1-C-EVR1M-GigE from [SILIOS Technologies](https://www.silios.com/) and the ROS Melodic version.
  
+## Table of Contents
+
+[Description](#description)
+
+[Package Installation](#package-installation)
+
+[Topics](#topics)
+
+[Folders](#folders)
+
+[Screenshots](#screenshots)
+
+[License](#license)
+
 ## Description
 
 The project structure is made for using it with Apache cordova and build a hybrid application for the live view of the camera. This project enables the reconfiguration of camera parameters such as exposure, frame rate etc. Especially, for this project is used a multispectral camera with 9 bands.
@@ -30,6 +44,14 @@ To connect ROS Joystick with ROS robot, it is necessary to install [rosbridge](h
 
 * [/docs](https://github.com/georgealexakis/multispectral-camera-controller/tree/master/docs) folder contains the files for github pages. Just ignore it or delete it.
 * [/www](https://github.com/georgealexakis/multispectral-camera-controller/tree/master/www) folder contains the main project files.
+
+## Screenshots
+
+![screenshot1](screenshots/screenshot1.png)
+
+![screenshot2](screenshots/screenshot2.png)
+
+![screenshot3](screenshots/screenshot3.png)
 
 ## License
 
